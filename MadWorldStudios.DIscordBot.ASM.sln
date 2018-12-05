@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MadWorldStudios.DIscordBot.ASM", "MadWorldStudios.DIscordBot.ASM\MadWorldStudios.DIscordBot.ASM.csproj", "{0C659A1C-F0BF-4976-BD53-6C19FE77C2D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MadWorldStudios.DIscordBot.ASM", "MadWorldStudios.DIscordBot.ASM\MadWorldStudios.DIscordBot.ASM.csproj", "{0C659A1C-F0BF-4976-BD53-6C19FE77C2D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{77280DC6-4645-4A38-9257-ED9758F848B0}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
