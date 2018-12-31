@@ -1,7 +1,11 @@
-﻿using Discord;
+using Discord;
 using Discord.WebSocket;
 using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.FileExtensions;
+using Microsoft.Extensions.Configuration.Json;
+using System.IO;
 
 namespace MadWorldStudios.DIscordBot.ASM
 {
@@ -14,23 +18,35 @@ namespace MadWorldStudios.DIscordBot.ASM
 
         public async Task MainAsync()
         {
+            var discordToken = GetDiscordTokenFromAppSettings();
+
             _client = new DiscordSocketClient();
 
             _client.Log += Log;
-            _client.MessageReceived += MessageReceived;
-
+            _client.MessageReceived += MessageReceived;            
             
-            string token = ""; // Remember to keep this private!
-            await _client.LoginAsync(TokenType.Bot, token);
+            await _client.LoginAsync(TokenType.Bot, discordToken);
             await _client.StartAsync();
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
 
+        private string GetDiscordTokenFromAppSettings()
+        {
+            var builder = new ConfigurationBuilder()
+                                .SetBasePath(Directory.GetCurrentDirectory())
+                                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            IConfigurationRoot configuration = builder.Build();
+
+
+            return configuration["discord_token"];
+        }
+
         private async Task MessageReceived(SocketMessage message)
         {
-            if (message.Content.StartsWith("!asm "))
+            if (message.Content.StartsWith("!ark "))
             {
                 await Log(message.Content);
                 var router = new MessageRouter(message);
