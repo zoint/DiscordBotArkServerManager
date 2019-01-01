@@ -34,10 +34,13 @@ namespace MadWorldStudios.DIscordBot.ASM
             switch (messageSegments[1])
             {
                 case "start":                    
-                    success = _manager.StartServer(messageSegments[2]);
+                    success = await _manager.StartServer(messageSegments[2]);
+                    response = $"Successfully started the server {messageSegments[2]}! " +
+                        $"This may take several minutes to complete.";
                     break;
                 case "stop":
                     success = await _manager.StopServer(messageSegments[2]);
+                    response = $"Successfully stopped the server {messageSegments[2]}!";
                     break;
                 default:
                     return GetHelpPrompt();
@@ -50,7 +53,7 @@ namespace MadWorldStudios.DIscordBot.ASM
             }
 
             //todo: this is just a place holder
-            return "Processing your command.";
+            return response;
         }
 
         private string GetHelpPrompt()

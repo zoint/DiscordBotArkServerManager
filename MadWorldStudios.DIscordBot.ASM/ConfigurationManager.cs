@@ -45,9 +45,10 @@ namespace MadWorldStudios.DIscordBot.ASM
             {
                 var s = new Server();
                 s.Name = server["Name"];
+                s.ShortName = server["ShortName"];
                 s.StartCommand = server["StartCommand"];
 
-                if (s.Name == null || s.StartCommand == null) throw new InvalidServerSettingsException();
+                if (s.Name == null || s.StartCommand == null || s.ShortName == null) throw new InvalidServerSettingsException();
 
                 _servers.Add(s);
             }
@@ -55,7 +56,7 @@ namespace MadWorldStudios.DIscordBot.ASM
 
         public Server FindServerByName(string serverName)
         {
-            var server = _servers.FirstOrDefault(s => s.Name == serverName);
+            var server = _servers.FirstOrDefault(s => s.ShortName == serverName);
 
             if (server == null) throw new ServerNotFoundException();
 
