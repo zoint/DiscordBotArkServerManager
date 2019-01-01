@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -8,11 +9,13 @@ namespace MadWorldStudios.DIscordBot.ASM
     {
         private SocketMessage _message;
         private ServerManager _manager;
-        
-        public MessageRouter(SocketMessage message)
+        private ConfigurationManager _configurationManager;
+
+        public MessageRouter(ConfigurationManager configurationManager, SocketMessage message)
         {
+            _configurationManager = configurationManager;
             _message = message;
-            _manager = new ServerManager();
+            _manager = new ServerManager(_configurationManager);
         }
 
         public async Task<string> GetResponse()
@@ -31,7 +34,7 @@ namespace MadWorldStudios.DIscordBot.ASM
             switch (messageSegments[1])
             {
                 case "start":                    
-                    success = await _manager.StartServer(messageSegments[2]);
+                    success = _manager.StartServer(messageSegments[2]);
                     break;
                 case "stop":
                     success = await _manager.StopServer(messageSegments[2]);
