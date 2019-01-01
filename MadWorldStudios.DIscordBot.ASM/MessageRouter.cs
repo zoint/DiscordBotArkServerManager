@@ -1,4 +1,5 @@
 ﻿using Discord.WebSocket;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Threading.Tasks;
 
@@ -8,11 +9,13 @@ namespace MadWorldStudios.DIscordBot.ASM
     {
         private SocketMessage _message;
         private ServerManager _manager;
-        
-        public MessageRouter(SocketMessage message)
+        private ConfigurationManager _configurationManager;
+
+        public MessageRouter(ConfigurationManager configurationManager, SocketMessage message)
         {
+            _configurationManager = configurationManager;
             _message = message;
-            _manager = new ServerManager();
+            _manager = new ServerManager(_configurationManager);
         }
 
         public async Task<string> GetResponse()
@@ -32,9 +35,12 @@ namespace MadWorldStudios.DIscordBot.ASM
             {
                 case "start":                    
                     success = await _manager.StartServer(messageSegments[2]);
+                    response = $"Successfully started the server {messageSegments[2]}! " +
+                        $"This may take several minutes to complete.";
                     break;
                 case "stop":
                     success = await _manager.StopServer(messageSegments[2]);
+                    response = $"Successfully stopped the server {messageSegments[2]}!";
                     break;
                 default:
                     return GetHelpPrompt();
@@ -47,7 +53,7 @@ namespace MadWorldStudios.DIscordBot.ASM
             }
 
             //todo: this is just a place holder
-            return "Processing your command.";
+            return response;
         }
 
         private string GetHelpPrompt()

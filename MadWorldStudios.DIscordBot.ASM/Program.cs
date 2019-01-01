@@ -11,6 +11,7 @@ namespace MadWorldStudios.DIscordBot.ASM
 {
     class Program
     {
+        private ConfigurationManager _configurationManager;
         private DiscordSocketClient _client;
 
         public static void Main(string[] args)
@@ -18,38 +19,26 @@ namespace MadWorldStudios.DIscordBot.ASM
 
         public async Task MainAsync()
         {
-            var discordToken = GetDiscordTokenFromAppSettings();
+            _configurationManager = new ConfigurationManager();
 
             _client = new DiscordSocketClient();
-
             _client.Log += Log;
             _client.MessageReceived += MessageReceived;            
             
-            await _client.LoginAsync(TokenType.Bot, discordToken);
+
+            await _client.LoginAsync(TokenType.Bot, _configurationManager.DiscordToken);
             await _client.StartAsync();
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
-
-        private string GetDiscordTokenFromAppSettings()
-        {
-            var builder = new ConfigurationBuilder()
-                                .SetBasePath(Directory.GetCurrentDirectory())
-                                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-
-            IConfigurationRoot configuration = builder.Build();
-
-
-            return configuration["discord_token"];
-        }
-
+      
         private async Task MessageReceived(SocketMessage message)
         {
             if (message.Content.StartsWith("!ark "))
             {
                 await Log(message.Content);
-                var router = new MessageRouter(message);
+                var router = new MessageRouter(_configurationManager, message);
 
                 var result = await router.GetResponse();                               
 
