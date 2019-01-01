@@ -25,15 +25,14 @@ namespace MadWorldStudios.DIscordBot.ASM
             _client.Log += Log;
             _client.MessageReceived += MessageReceived;            
             
+
             await _client.LoginAsync(TokenType.Bot, _configurationManager.DiscordToken);
             await _client.StartAsync();
 
             // Block this task until the program is closed.
             await Task.Delay(-1);
         }
-
-       
-
+      
         private async Task MessageReceived(SocketMessage message)
         {
             if (message.Content.StartsWith("!ark "))
